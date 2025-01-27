@@ -1,62 +1,50 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../component/FormField";
 import CustomButton from "../../component/CustomButton";
 import { Link } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import { router } from "expo-router";
 
-const Signin = () => {
+const Signup = () => {
   const [form, setForm] = useState({
+    username: "",
     email: "",
     password: "",
   });
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
-  const handleSignInWithEmail = async () => {
-    console.log("sign in with email");
+  const handleSignup = async () => {
     setIsSubmiting(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
     });
 
-    const isfirstTime = await checkIfFirstTimeUser(data?.user?.id);
+    console.log(session);
 
-    console.log("data", data);
-    if (isfirstTime) {
-      router.replace("/profile");
-    } else {
-      router.replace("/home");
-    }
+    if (error) Alert.alert(error.message);
+    if (!session)
+      Alert.alert("Please check your inbox for email verification!");
     setIsSubmiting(false);
-
-    if (error) {
-      alert(error.message);
-    }
-  };
-
-  const checkIfFirstTimeUser = async (id: string | undefined) => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("username")
-      .eq("id", id)
-      .single();
-
-    if (!data?.username) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   return (
     <SafeAreaView className="bg-secondary-400 h-full">
       <ScrollView>
         <View className="w-full justify-center min-h-[85vh] px-4 my-6">
-          <Text className="text-2xl font-psemibold">Log in to Team Up</Text>
+          <Text className="text-2xl font-psemibold">Sign up to Team Up</Text>
+          {/* <FormField
+            title="Username"
+            value={form.username}
+            handleChangeText={(e: any) => setForm({ ...form, email: e })}
+            otherStyles={"mt-7"}
+            keyboardType="email-address"
+          /> */}
           <FormField
             title="Email"
             value={form.email}
@@ -71,19 +59,19 @@ const Signin = () => {
             otherStyles={"mt-7"}
           />
           <CustomButton
-            title="Sign in"
-            handlePress={handleSignInWithEmail}
+            title="Sign up"
+            handlePress={handleSignup}
             containerStyle={"mt-7"}
             textStyle={"font-pbold"}
             isLoading={isSubmiting}
           />
           <View className="justify-center items-center flex-row mt-7">
             <Text className="text-lg text-gray-800 font-pregular">
-              Don't have account? {""}
+              Already have account? {""}
             </Text>
-            <Link href="sign-up">
+            <Link href="sign-in">
               <Text className="text-lg text-primary-400 font-psemibold ml-2">
-                Sign up
+                Sign in
               </Text>
             </Link>
           </View>
@@ -93,4 +81,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;
