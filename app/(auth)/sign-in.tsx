@@ -27,7 +27,7 @@ const Signin = () => {
 
     console.log("data", data);
     if (isfirstTime) {
-      router.replace("/profile");
+      router.replace("/create-user-info");
     } else {
       router.replace("/home");
     }

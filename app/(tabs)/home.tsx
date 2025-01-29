@@ -3,6 +3,7 @@ import React from "react";
 import { supabase } from "../../lib/supabase";
 import CustomButton from "../../component/CustomButton";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
   const handleSignout = async () => {
@@ -12,12 +13,20 @@ const Home = () => {
     console.log("hello");
   };
   return (
-    <View className="flex-1 justify-center items-center h-full">
-      <Text>Home</Text>
-      <View>
-        <CustomButton title="Sign out" handlePress={handleSignout} />
+    <SafeAreaView className="p-4">
+      <View className="h-full justify-center items-center gap-2">
+        <View className="">
+          <Text>Home</Text>
+        </View>
+        {/* <View className="w-full">
+          <CustomButton
+            title="Sign out"
+            handlePress={handleSignout}
+            containerStyle={"w-full"}
+          />
+        </View> */}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
