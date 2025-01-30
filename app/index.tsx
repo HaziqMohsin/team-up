@@ -9,33 +9,31 @@ import { router, Redirect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../component/CustomButton";
 import { Link } from "expo-router";
+import useAuthStore from "../store/authStore";
 
 export default function App() {
-  const [session, setSession] = useState<Session | null>(null);
+  const { session, _hasHydrated, initializeAuth } = useAuthStore();
 
   useEffect(() => {
-    // Check initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    // Subscribe to auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    // Cleanup subscription on unmount
-    return () => subscription?.unsubscribe();
-  }, []);
+    const cleanup = initializeAuth();
+    return cleanup;
+  }, [initializeAuth]);
 
   useEffect(() => {
-    // Handle navigation based on session state
     if (session?.user) {
       router.replace("/home");
     }
   }, [session]);
+
+  if (!_hasHydrated) {
+    return (
+      <SafeAreaView className="bg-secondary-400 h-full">
+        <View className="flex-1 justify-center items-center">
+          <Text>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="bg-secondary-400 h-full">

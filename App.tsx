@@ -4,6 +4,7 @@ import Auth from "./component/Auth";
 import Account from "./component/Account";
 import { View } from "react-native";
 import { Session } from "@supabase/supabase-js";
+import useAuthStore from "./store/authStore";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
