@@ -6,6 +6,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { supabase } from "../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { router } from "expo-router";
+import { createTeam } from "../services/teamsService";
 
 type FormData = {
   teamName: string;
@@ -34,30 +35,15 @@ const CreateTeamScreen = () => {
   }, []);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
-    createTeam(data);
+    handleCreateTeam(data);
   };
 
-  const createTeam = async ({ teamName, location }: FormData) => {
+  const handleCreateTeam = async ({ teamName, location }: FormData) => {
     try {
       setisSubmitLoading(true);
       if (!session?.user) throw new Error("No user on the session!");
 
-      const create = {
-        name: teamName,
-        location,
-      };
-
-      const { data, error } = await supabase
-        .from("teams")
-        .insert(create)
-        .select();
-
-      if (error) {
-        console.log("error", error);
-
-        throw error;
-      }
+      await createTeam({ teamName, location });
 
       router.replace("/(team)");
     } catch (error) {

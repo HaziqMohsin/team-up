@@ -5,12 +5,13 @@ import "../global.css";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import useAuthStore from "../store/authStore";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const [fontsLoaded, error] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
@@ -22,18 +23,38 @@ const RootLayout = () => {
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
+  const { initializeAuth, _hasHydrated } = useAuthStore();
+
   useEffect(() => {
-    if (error) throw error;
-    if (fontsLoaded) SplashScreen.hideAsync();
-  }, [fontsLoaded, error]);
+    // Initialize auth listeners
+    const cleanupAuth = initializeAuth();
+    return () => {
+      cleanupAuth();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Hide splash screen when everything is ready
+    if (fontError) throw fontError;
+    if (fontsLoaded && _hasHydrated) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError, _hasHydrated]);
+
+  // Show nothing while loading
+  if (!fontsLoaded || !_hasHydrated) {
+    return null;
+  }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(other)" options={{ headerShown: false }} />
-    </Stack>
+    <>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(other)" options={{ headerShown: false }} />
+      </Stack>
+    </>
   );
 };
 
