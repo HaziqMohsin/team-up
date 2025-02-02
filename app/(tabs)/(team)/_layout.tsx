@@ -15,6 +15,7 @@ const TeamLayout = () => {
         name="myteam"
         options={{ title: "My Team", headerShown: true }}
       />
+
       {/* If you have more screens, add them here */}
     </Stack>
   );
