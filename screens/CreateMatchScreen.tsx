@@ -17,6 +17,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import useAuthStore from "../store/authStore";
 import { createMatch } from "../services/matchService";
 import { router } from "expo-router";
+import CustomSelection from "../component/CustomSelection";
 
 type FormData = {
   place: string;
@@ -24,6 +25,7 @@ type FormData = {
   date: any;
   time: any;
   teamHome: string;
+  type: string;
 };
 
 const CreateMatchScreen = () => {
@@ -32,6 +34,11 @@ const CreateMatchScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const matchType = [
+    { label: "5v5", value: "futsal" },
+    { label: "11v11", value: "football" },
+  ];
 
   const {
     register,
@@ -75,7 +82,7 @@ const CreateMatchScreen = () => {
     location,
     date,
     time,
-    teamHome,
+    type,
   }: FormData) => {
     try {
       setIsLoading(true);
@@ -97,6 +104,7 @@ const CreateMatchScreen = () => {
         dateFormat,
         timeFormat,
         teamHome,
+        type,
       });
 
       if (res.data) {
@@ -263,6 +271,17 @@ const CreateMatchScreen = () => {
             </View>
           )}
         />
+        <View className="mt-7">
+          <Text className="text-base text-black mb-2 font-psemibold">
+            Match type
+          </Text>
+          <CustomSelection
+            control={control}
+            name="type"
+            options={matchType}
+            defaultValue="futsal"
+          />
+        </View>
       </View>
       <View className="mt-7 p-4">
         <CustomButton handlePress={handleSubmit(onSubmit)} title="Submit" />

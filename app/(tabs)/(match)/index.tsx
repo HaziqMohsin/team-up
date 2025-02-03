@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../../component/CustomButton";
 import { router } from "expo-router";
 import { Link } from "expo-router";
+import AvailableOpponent from "../../../component/AvailableOpponent";
 
 const Match = () => {
   const handleCreateMatch = () => {
@@ -12,9 +13,8 @@ const Match = () => {
   };
   return (
     <SafeAreaView className="flex-1 h-full">
-      <View className="px-4 py-2">
-        <Text>Match</Text>
-      </View>
+      <AvailableOpponent />
+
       <View className="px-4">
         {/* <Link href="/(match)/create"> */}
         <CustomButton title="Create Match" handlePress={handleCreateMatch} />
