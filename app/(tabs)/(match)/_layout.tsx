@@ -11,6 +11,7 @@ const MatchLayout = () => {
     >
       <Stack.Screen name="index" options={{ title: "Match" }} />
       <Stack.Screen name="create" options={{ presentation: "modal" }} />
+      <Stack.Screen name="[matchrequest]" options={{ presentation: "modal" }} />
     </Stack>
   );
 };

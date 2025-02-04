@@ -15,7 +15,7 @@ import CustomButton from "../component/CustomButton";
 import FormField from "../component/FormField";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import useAuthStore from "../store/authStore";
-import { createMatch } from "../services/matchService";
+import { createMatchRequest } from "../services/matchService";
 import { router } from "expo-router";
 import CustomSelection from "../component/CustomSelection";
 
@@ -36,8 +36,8 @@ const CreateMatchScreen = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const matchType = [
-    { label: "5v5", value: "futsal" },
-    { label: "11v11", value: "football" },
+    { label: "futsal", value: "futsal" },
+    { label: "football", value: "football" },
   ];
 
   const {
@@ -98,7 +98,7 @@ const CreateMatchScreen = () => {
         .join(":");
       let teamHome = data?.id;
 
-      const res = await createMatch({
+      const res = await createMatchRequest({
         place,
         location,
         dateFormat,

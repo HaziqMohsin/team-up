@@ -7,9 +7,7 @@ import CustomButton from "../../component/CustomButton";
 const Profile = () => {
   const handleSignout = async () => {
     const { error } = await supabase.auth.signOut();
-    console.log("errer", error);
-    router.replace("/sign-in");
-    console.log("hello");
+    router.replace("(auth)/sign-in");
   };
   return (
     <SafeAreaView className="p-4">

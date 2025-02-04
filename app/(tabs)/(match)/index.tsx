@@ -17,7 +17,7 @@ const Match = () => {
 
       <View className="px-4">
         {/* <Link href="/(match)/create"> */}
-        <CustomButton title="Create Match" handlePress={handleCreateMatch} />
+        {/* <CustomButton title="Create Match" handlePress={handleCreateMatch} /> */}
         {/* </Link> */}
       </View>
 

@@ -23,6 +23,11 @@ const Signin = () => {
       password: form.password,
     });
 
+    if (error) {
+      alert(error.message);
+      return false;
+    }
+
     const isfirstTime = await checkIfFirstTimeUser(data?.user?.id);
 
     console.log("data", data);
@@ -32,10 +37,6 @@ const Signin = () => {
       router.replace("/home");
     }
     setIsSubmiting(false);
-
-    if (error) {
-      alert(error.message);
-    }
   };
 
   const checkIfFirstTimeUser = async (id: string | undefined) => {
