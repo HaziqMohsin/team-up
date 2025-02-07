@@ -10,9 +10,8 @@ import { createMatch } from "../services/matchService";
 import { router } from "expo-router";
 
 const MatchRequestIdScreen = () => {
-  const { user, id } = useLocalSearchParams<{
-    user: string;
-    id?: string;
+  const { id } = useLocalSearchParams<{
+    id: string;
   }>();
 
   const [data, setData] = useState<any | null>(null);

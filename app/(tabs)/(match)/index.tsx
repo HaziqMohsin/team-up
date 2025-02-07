@@ -5,6 +5,7 @@ import CustomButton from "../../../component/CustomButton";
 import { router } from "expo-router";
 import { Link } from "expo-router";
 import AvailableOpponent from "../../../component/AvailableOpponent";
+import AvailableMatch from "../../../component/AvailableMatch";
 
 const Match = () => {
   const handleCreateMatch = () => {
@@ -14,7 +15,7 @@ const Match = () => {
   return (
     <SafeAreaView className="flex-1 h-full">
       <AvailableOpponent />
-
+      <AvailableMatch />
       <View className="px-4">
         {/* <Link href="/(match)/create"> */}
         {/* <CustomButton title="Create Match" handlePress={handleCreateMatch} /> */}

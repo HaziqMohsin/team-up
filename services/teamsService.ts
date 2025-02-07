@@ -44,5 +44,15 @@ export const getOwnerTeams = async () => {
     throw userError;
   }
 
-  return teams;
+  return { teams, error };
+};
+
+export const getTeam = async (teamId: string) => {
+  const { data: team, error } = await supabase
+    .from("teams")
+    .select("*")
+    .eq("id", teamId)
+    .single();
+
+  return { team, error };
 };

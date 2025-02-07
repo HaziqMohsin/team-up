@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabase";
+import { getTeam } from "./teamsService";
 
 type TCreateMatch = {
   place: string;
@@ -102,12 +103,67 @@ export const createMatch = async (matchRequestId: string, teamId: string) => {
     .select()
     .single();
 
-  console.log("match", match);
+  // amik teamhome owner
+
+  // amik teamwaway owner
+  // insert ke participants
 
   if (matchError) {
     console.log(matchError);
     throw matchError;
   }
 
+  const teamHome = await getTeam(team_home);
+  const teamAway = await getTeam(teamId);
+
+  let { data: participant, error: participantsError } = await supabase
+    .from("match_participants")
+    .insert([
+      {
+        player_id: teamHome?.team.created_by,
+        team_id: teamHome?.team.id,
+        match_id: match?.id,
+        joined_at: new Date(),
+      },
+      {
+        player_id: teamAway?.team.created_by,
+        team_id: teamAway?.team.id,
+        match_id: match?.id,
+        joined_at: new Date(),
+      },
+    ])
+    .select();
+
   return { match, matchError };
+};
+
+export const getAvailableMatch = async () => {
+  let { data: matches, error } = await supabase
+    .from("matches")
+    .select(
+      `*, team_home:team_home(id, name, logo_url), team_away:team_away(id, name, logo_url)`
+    );
+
+  return { matches, error };
+};
+
+export const getMatchById = async (id: string) => {
+  let { data: matches_detals, error } = await supabase
+    .from("matches")
+    .select(
+      `*, team_home:team_home(id, name, logo_url), team_away:team_away(id, name, logo_url)`
+    )
+    .eq("id", id)
+    .single();
+
+  return { matches_detals, error };
+};
+
+export const getMatchParticipants = async (id: string) => {
+  let { data: participants, error } = await supabase
+    .from("match_participants")
+    .select(`*, player:player_id(id, username)`)
+    .eq("match_id", id);
+
+  return { participants, error };
 };

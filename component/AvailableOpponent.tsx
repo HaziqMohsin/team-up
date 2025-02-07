@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { getAvailableOpponent } from "../services/matchService";
+import { getOwnerTeams } from "../services/teamsService";
 import CustomButton from "./CustomButton";
 import { Image } from "expo-image";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -10,6 +11,7 @@ import { router } from "expo-router";
 
 const AvailableOpponent = () => {
   const [data, setData] = useState<string[] | null>(null);
+  const [dataTeams, setDataTeams] = useState<string[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const blurhash =
@@ -24,8 +26,34 @@ const AvailableOpponent = () => {
 
         if (match_request) {
           setData(match_request);
+          //   console.log(match_request);
         }
       } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        const { teams, error } = await getOwnerTeams();
+
+        if (teams) {
+          setDataTeams(teams);
+          console.log(teams);
+        }
+        if (error) {
+          setDataTeams([]);
+        }
+      } catch (error) {
+        // console.log("error", error);
       } finally {
         setIsLoading(false);
       }
@@ -39,8 +67,13 @@ const AvailableOpponent = () => {
   };
 
   const handlePress = (matchRequestId: string) => {
-    router.push(`/(match)/matchrequest?id=${matchRequestId}`);
+    router.push(`/(match)/matchrequest/${matchRequestId}`);
   };
+
+  if (dataTeams?.length === 0) {
+    return null;
+  }
+
   return (
     <View className="p-4">
       <Text className="text-xl font-bold">Available Opponent</Text>
