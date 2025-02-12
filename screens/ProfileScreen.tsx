@@ -4,8 +4,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../lib/supabase";
 import { router } from "expo-router";
 import CustomButton from "../component/CustomButton";
+import Account from "../component/Account";
+import { Session } from "@supabase/supabase-js";
 
 const ProfileScreen = () => {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
   const handleSignout = async () => {
     const { error } = await supabase.auth.signOut();
     router.replace("(auth)/sign-in");
@@ -13,7 +27,9 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>ProfileScreen</Text>
+        {session && session.user && (
+          <Account key={session.user.id} session={session} />
+        )}
       </View>
       <View className="p-4">
         <CustomButton title="Sign Out" handlePress={handleSignout} />

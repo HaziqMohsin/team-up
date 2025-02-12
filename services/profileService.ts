@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabase";
 
-export const getProfile = async () => {
+export const getUserProfile = async () => {
   const {
     data: { user },
     error: userError,
