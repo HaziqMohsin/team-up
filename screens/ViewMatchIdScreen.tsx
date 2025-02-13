@@ -8,11 +8,14 @@ import CustomButton from "../component/CustomButton";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { joinMatch } from "../services/matchService";
 import { router } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ViewMatchIdScreen = () => {
   const { id } = useLocalSearchParams<{
     id?: string;
   }>();
+
+  const queryClient = useQueryClient();
 
   const [data, setData] = useState<any | null>(null);
   const [participantData, setParticipantData] = useState<any | null>(null);
@@ -58,6 +61,7 @@ const ViewMatchIdScreen = () => {
       });
 
       if (data) {
+        queryClient.invalidateQueries(["availableMatch"] as any);
         router.replace("/(tabs)/home");
         console.log(data);
       }

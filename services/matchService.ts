@@ -153,7 +153,9 @@ export const getAvailableMatch = async () => {
         match_participants!left(player_id)`
   );
 
-  if (error) return { matches: null, error };
+  if (error) {
+    throw new Error(error.message);
+  }
 
   // **Filter matches where user is NOT in match_participants**
   const filteredMatches = matches?.filter(
@@ -163,7 +165,7 @@ export const getAvailableMatch = async () => {
       )
   );
 
-  return { matches: filteredMatches, error: null };
+  return filteredMatches;
 };
 
 // export const getAvailableMatch = async () => {

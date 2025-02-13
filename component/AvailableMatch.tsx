@@ -5,43 +5,32 @@ import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import { parse, format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 const AvailableMatch = () => {
-  const [data, setData] = useState<any | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
   const blurhash =
     "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+  const {
+    data: availableMatch,
+    isLoading: isAvailableMatchLoading,
+    isError,
+    error: queryError,
+  } = useQuery({
+    queryKey: ["availableMatch"],
+    queryFn: getAvailableMatch,
+  });
 
-      try {
-        const { matches } = await getAvailableMatch();
-
-        if (matches) {
-          setData(matches);
-          console.log("matches", matches);
-        }
-      } catch (error) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  console.log("AvailableMatch", availableMatch);
 
   const handlePress = (id: string) => {
-    console.log("id", id);
     router.push(`${id}`);
   };
   return (
     <View className="p-4">
       <Text className="text-xl font-bold">Available Match</Text>
       <FlatList
-        data={data}
+        data={availableMatch as any}
         renderItem={({ item }) => {
           const parsedDate = parse(item.date, "yyyy-MM-dd", new Date());
           const parsedTime = parse(item.time, "HH:mm:ss", new Date());
