@@ -138,14 +138,63 @@ export const createMatch = async (matchRequestId: string, teamId: string) => {
 };
 
 export const getAvailableMatch = async () => {
-  let { data: matches, error } = await supabase
-    .from("matches")
-    .select(
-      `*, team_home:team_home(id, name, logo_url), team_away:team_away(id, name, logo_url)`
-    );
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  return { matches, error };
+  if (userError) return { matches: null, error: userError };
+  if (!user?.id) return { matches: null, error: "User not authenticated" };
+
+  let { data: matches, error } = await supabase.from("matches").select(
+    `*, 
+        team_home:team_home(id, name, logo_url), 
+        team_away:team_away(id, name, logo_url),
+        match_participants!left(player_id)`
+  );
+
+  if (error) return { matches: null, error };
+
+  // **Filter matches where user is NOT in match_participants**
+  const filteredMatches = matches?.filter(
+    (match) =>
+      !match.match_participants.some(
+        (participant: any) => participant.player_id === user.id
+      )
+  );
+
+  return { matches: filteredMatches, error: null };
 };
+
+// export const getAvailableMatch = async () => {
+//   const {
+//     data: { user },
+//     error: userError,
+//   } = await supabase.auth.getUser();
+
+//   if (userError) return { matches: null, error: userError };
+//   if (!user?.id) return { matches: null, error: "User not authenticated" };
+
+//   let { data: matches, error } = await supabase
+//     .from("matches")
+//     .select(
+//       `*,
+//         team_home:team_home(id, name, logo_url),
+//         team_away:team_away(id, name, logo_url)`
+//     )
+//     .not(
+//       "id",
+//       "in",
+//       supabase
+//         .from("match_participants")
+//         .select("match_id")
+//         .eq("player_id", user.id)
+//     );
+
+//   console.log("matches", matches);
+
+//   return { matches, error };
+// };
 
 export const getMatchById = async (id: string) => {
   let { data: matches_detals, error } = await supabase

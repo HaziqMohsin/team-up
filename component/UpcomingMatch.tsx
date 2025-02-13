@@ -5,6 +5,8 @@ import { getUserMatch, getAvailableMatch } from "../services/matchService";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Image } from "expo-image";
 import { parse, format } from "date-fns";
+import CustomButton from "./CustomButton";
+import { router } from "expo-router";
 
 const UpcomingMatch = () => {
   const {
@@ -21,6 +23,18 @@ const UpcomingMatch = () => {
 
   const blurhash =
     "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+
+  const handleRouteMatch = () => {
+    router.push("/(match)");
+  };
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -113,6 +127,18 @@ const UpcomingMatch = () => {
           );
         }}
         keyExtractor={(item, i) => i.toString()}
+        ListEmptyComponent={() => (
+          <View className="items-center justify-center mt-4">
+            <Text className="text-gray-500 text-lg mb-2">
+              No upcoming matches
+            </Text>
+            <CustomButton
+              title="Find a match"
+              handlePress={handleRouteMatch}
+              containerStyle="px-2 min-h-[40px]"
+            />
+          </View>
+        )}
       />
     </View>
   );

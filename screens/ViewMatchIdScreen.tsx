@@ -7,6 +7,7 @@ import { Image } from "expo-image";
 import CustomButton from "../component/CustomButton";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { joinMatch } from "../services/matchService";
+import { router } from "expo-router";
 
 const ViewMatchIdScreen = () => {
   const { id } = useLocalSearchParams<{
@@ -49,13 +50,17 @@ const ViewMatchIdScreen = () => {
 
   const handleRequestJoin = async (teamId: string) => {
     // handle request join to join the match with team_id
-
     try {
       const { data, error } = await joinMatch({
         match_id: id,
         team_id: teamId,
         joined_at: new Date(),
       });
+
+      if (data) {
+        router.replace("/(tabs)/home");
+        console.log(data);
+      }
     } catch (error) {
       console.log(error);
     }

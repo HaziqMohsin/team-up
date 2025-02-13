@@ -4,6 +4,7 @@ import { getAvailableMatch } from "../services/matchService";
 import { Image } from "expo-image";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
+import { parse, format } from "date-fns";
 
 const AvailableMatch = () => {
   const [data, setData] = useState<any | null>(null);
@@ -41,72 +42,77 @@ const AvailableMatch = () => {
       <Text className="text-xl font-bold">Available Match</Text>
       <FlatList
         data={data}
-        renderItem={({ item }) => (
-          <Pressable onPress={() => handlePress(item.id)}>
-            <View className="bg-white p-4 my-2 rounded-lg">
-              <View className="flex-row w-full justify-center items-center relative">
-                <View className="flex-row items-center justify-end flex-1 mx-4">
-                  <View className="mr-2">
-                    <Text>{item.team_home.name}</Text>
+        renderItem={({ item }) => {
+          const parsedDate = parse(item.date, "yyyy-MM-dd", new Date());
+          const parsedTime = parse(item.time, "HH:mm:ss", new Date());
+          const formattedDate = format(parsedDate, "EEE, d MMM yyyy");
+          const formattedTime = format(parsedTime, "h:mm a");
+          const combinedString = `${formattedDate}, ${formattedTime}`;
+          return (
+            <Pressable onPress={() => handlePress(item.id)}>
+              <View className="bg-white p-4 my-2 rounded-lg">
+                <View className="flex-row w-full justify-center items-center relative">
+                  <View className="flex-row items-center justify-end flex-1 mx-4">
+                    <View className="mr-2">
+                      <Text>{item.team_home.name}</Text>
+                    </View>
+                    <View style={styles.container} className="">
+                      <Image
+                        style={styles.image}
+                        source={item.team_home.logo_url}
+                        placeholder={{ blurhash }}
+                        contentFit="cover"
+                        transition={1000}
+                      />
+                    </View>
                   </View>
-                  <View style={styles.container} className="">
-                    <Image
-                      style={styles.image}
-                      source={item.team_home.logo_url}
-                      placeholder={{ blurhash }}
-                      contentFit="cover"
-                      transition={1000}
-                    />
+
+                  <View
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      transform: [{ translateX: -5 }],
+                    }}
+                  >
+                    <Text style={{ fontSize: 16, fontWeight: "700" }}>V</Text>
+                  </View>
+
+                  <View className="flex-row items-center justify-start flex-1 mx-4">
+                    <View style={styles.container} className="">
+                      <Image
+                        style={styles.image}
+                        source={item.team_home.logo_url}
+                        placeholder={{ blurhash }}
+                        contentFit="cover"
+                        transition={1000}
+                      />
+                    </View>
+                    <View className="ml-2">
+                      <Text>{item.team_away.name}</Text>
+                    </View>
                   </View>
                 </View>
 
-                <View
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    transform: [{ translateX: -5 }],
-                  }}
-                >
-                  <Text style={{ fontSize: 16, fontWeight: "700" }}>V</Text>
+                <View className="flex-row items-center gap-2 justify-center mt-4">
+                  <MaterialCommunityIcons
+                    name="soccer-field"
+                    size={24}
+                    color="black"
+                  />
+                  <Text>{item.location}</Text>
                 </View>
-
-                <View className="flex-row items-center justify-start flex-1 mx-4">
-                  <View style={styles.container} className="">
-                    <Image
-                      style={styles.image}
-                      source={item.team_home.logo_url}
-                      placeholder={{ blurhash }}
-                      contentFit="cover"
-                      transition={1000}
-                    />
-                  </View>
-                  <View className="ml-2">
-                    <Text>{item.team_away.name}</Text>
-                  </View>
+                <View className="flex-row items-center justify-center gap-2">
+                  <MaterialCommunityIcons
+                    name="calendar-clock"
+                    size={24}
+                    color="black"
+                  />
+                  <Text>{combinedString}</Text>
                 </View>
               </View>
-
-              <View className="flex-row items-center gap-2 justify-center mt-4">
-                <MaterialCommunityIcons
-                  name="soccer-field"
-                  size={24}
-                  color="black"
-                />
-                <Text>{item.location}</Text>
-              </View>
-              <View className="flex-row items-center justify-center gap-2">
-                <MaterialCommunityIcons
-                  name="calendar-clock"
-                  size={24}
-                  color="black"
-                />
-                <Text>
-                  {item.date}, {item.time}{" "}
-                </Text>
-              </View>
-            </View>
-          </Pressable>
-        )}
+            </Pressable>
+          );
+        }}
         keyExtractor={(item) => item.id}
       />
     </View>

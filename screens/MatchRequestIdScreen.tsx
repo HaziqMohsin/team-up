@@ -46,9 +46,9 @@ const MatchRequestIdScreen = () => {
     console.log("here");
     setIsLoading(true);
     try {
-      const { match } = await createMatch(id as string, dataTeam?.id);
+      const { match } = await createMatch(id as string, dataTeam.teams?.id);
       if (match) {
-        router.replace("/(match)");
+        router.replace("home");
       }
     } catch (error) {
       console.log(error);

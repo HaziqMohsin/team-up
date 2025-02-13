@@ -1,7 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { supabase } from "../../lib/supabase";
-import CustomButton from "../../component/CustomButton";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingMatch from "../../component/UpcomingMatch";
@@ -16,14 +15,10 @@ const Home = () => {
   return (
     <SafeAreaView className="p-4">
       <View className="h-full gap-2">
+        <View>
+          <Text className="text-xl font-bold"></Text>
+        </View>
         <UpcomingMatch />
-        {/* <View className="w-full">
-          <CustomButton
-            title="Sign out"
-            handlePress={handleSignout}
-            containerStyle={"w-full"}
-          />
-        </View> */}
       </View>
     </SafeAreaView>
   );
