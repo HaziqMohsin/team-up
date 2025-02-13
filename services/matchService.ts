@@ -217,7 +217,7 @@ export const getUserMatch = async () => {
     .from("match_participants")
     .select(
       `
-        joined_at,
+       *,
         match:match_id(
           *,
           team_home:team_home(
