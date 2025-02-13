@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 import CustomButton from "../../component/CustomButton";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import UpcomingMatch from "../../component/UpcomingMatch";
 
 const Home = () => {
   const handleSignout = async () => {
@@ -14,10 +15,8 @@ const Home = () => {
   };
   return (
     <SafeAreaView className="p-4">
-      <View className="h-full justify-center items-center gap-2">
-        <View className="">
-          <Text>Home</Text>
-        </View>
+      <View className="h-full gap-2">
+        <UpcomingMatch />
         {/* <View className="w-full">
           <CustomButton
             title="Sign out"

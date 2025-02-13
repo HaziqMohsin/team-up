@@ -11,7 +11,7 @@ import { router } from "expo-router";
 
 const AvailableOpponent = () => {
   const [data, setData] = useState<string[] | null | undefined>(null);
-  const [dataTeams, setDataTeams] = useState<string[] | null>(null);
+  const [dataTeams, setDataTeams] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const blurhash =
@@ -50,7 +50,7 @@ const AvailableOpponent = () => {
           console.log(teams);
         }
         if (error) {
-          setDataTeams([]);
+          setDataTeams(null);
         }
       } catch (error) {
         // console.log("error", error);
@@ -70,11 +70,11 @@ const AvailableOpponent = () => {
     router.push(`/(match)/matchrequest/${matchRequestId}`);
   };
 
-  if (dataTeams?.length === 0) {
+  if (!dataTeams) {
     return null;
   }
 
-  if (dataTeams && dataTeams?.length > 0) {
+  if (dataTeams) {
     return (
       <View className="p-4">
         <Text className="text-xl font-bold">Available Opponent</Text>

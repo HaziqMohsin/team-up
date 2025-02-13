@@ -6,6 +6,7 @@ import { getMatchById, getMatchParticipants } from "../services/matchService";
 import { Image } from "expo-image";
 import CustomButton from "../component/CustomButton";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { joinMatch } from "../services/matchService";
 
 const ViewMatchIdScreen = () => {
   const { id } = useLocalSearchParams<{
@@ -46,9 +47,18 @@ const ViewMatchIdScreen = () => {
   const blurhash =
     "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-  const handleRequestJoin = async () => {
+  const handleRequestJoin = async (teamId: string) => {
     // handle request join to join the match with team_id
-    console.log("request join");
+
+    try {
+      const { data, error } = await joinMatch({
+        match_id: id,
+        team_id: teamId,
+        joined_at: new Date(),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -86,7 +96,7 @@ const ViewMatchIdScreen = () => {
           </View>
           <View>
             <CustomButton
-              handlePress={handleRequestJoin}
+              handlePress={() => handleRequestJoin(data?.team_home.id)}
               title="Join"
               containerStyle={" p-4"}
             />
@@ -135,7 +145,7 @@ const ViewMatchIdScreen = () => {
           </View>
           <View>
             <CustomButton
-              handlePress={handleRequestJoin}
+              handlePress={() => handleRequestJoin(data?.team_away.id)}
               title="Join"
               containerStyle={" p-4"}
             />

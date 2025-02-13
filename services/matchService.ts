@@ -167,3 +167,79 @@ export const getMatchParticipants = async (id: string) => {
 
   return { participants, error };
 };
+
+export const joinMatch = async (body: any) => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  const { data, error } = await supabase
+    .from("match_participants")
+    .insert([
+      {
+        team_id: body.team_id,
+        match_id: body.match_id,
+        player_id: user?.id,
+        joined_at: body.joined_at,
+      },
+    ])
+    .select();
+
+  return { data, error };
+};
+
+// export const getUserMatch = async () => {
+//   const {
+//     data: { user },
+//     error: userError,
+//   } = await supabase.auth.getUser();
+
+//   let {data, error} = await supabase
+//     .from("match_participants")
+//     .select(`*, player:player_id(id, username)`)
+//     .eq("player_id", user?.id);
+
+//   return {data, error}
+// };
+
+export const getUserMatch = async () => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw new Error(userError.message);
+  }
+
+  let { data, error } = await supabase
+    .from("match_participants")
+    .select(
+      `
+        joined_at,
+        match:match_id(
+          *,
+          team_home:team_home(
+            id,
+            name,
+            logo_url
+          ),
+          team_away:team_away(
+            id,
+            name,
+            logo_url
+          )
+        )
+      `
+    )
+    .eq("player_id", user?.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+  // Typically with React Query, you'd return the actual data
+  // or throw an error if something goes wrong
+};
