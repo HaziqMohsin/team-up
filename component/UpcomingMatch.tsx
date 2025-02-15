@@ -19,8 +19,6 @@ const UpcomingMatch = () => {
     queryFn: getUserMatch,
   });
 
-  console.log(matches);
-
   const blurhash =
     "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
@@ -37,7 +35,7 @@ const UpcomingMatch = () => {
   }
 
   return (
-    <View>
+    <View className="p-4">
       <Text className="text-xl font-bold">Upcoming Match</Text>
       <FlatList
         data={matches}
@@ -132,11 +130,11 @@ const UpcomingMatch = () => {
             <Text className="text-gray-500 text-lg mb-2">
               No upcoming matches
             </Text>
-            <CustomButton
+            {/* <CustomButton
               title="Find a match"
               handlePress={handleRouteMatch}
               containerStyle="px-2 min-h-[40px]"
-            />
+            /> */}
           </View>
         )}
       />

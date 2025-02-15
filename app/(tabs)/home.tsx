@@ -4,6 +4,8 @@ import { supabase } from "../../lib/supabase";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UpcomingMatch from "../../component/UpcomingMatch";
+import AvailableMatch from "../../component/AvailableMatch";
+import HomeGreeting from "../../component/ui/HomeGreeting";
 
 const Home = () => {
   const handleSignout = async () => {
@@ -13,13 +15,10 @@ const Home = () => {
     console.log("hello");
   };
   return (
-    <SafeAreaView className="p-4">
-      <View className="h-full gap-2">
-        <View>
-          <Text className="text-xl font-bold"></Text>
-        </View>
-        <UpcomingMatch />
-      </View>
+    <SafeAreaView className="flex-1 h-full">
+      <HomeGreeting />
+      <UpcomingMatch />
+      <AvailableMatch />
     </SafeAreaView>
   );
 };

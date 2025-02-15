@@ -5,11 +5,19 @@ export const getUserProfile = async () => {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
+
+  if (userError) return { matches: null, error: userError };
+  if (!user?.id) return { matches: null, error: "User not authenticated" };
+
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", user?.id)
     .single();
 
-  return { data, error };
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 };

@@ -38,8 +38,8 @@ const ProfileScreen = () => {
   });
 
   useEffect(() => {
-    if (profileResult?.data) {
-      reset(profileResult.data);
+    if (profileResult) {
+      reset(profileResult);
     }
   }, [profileResult, reset]);
 
@@ -66,7 +66,7 @@ const ProfileScreen = () => {
           <View style={styles.container} className="">
             <Image
               style={styles.image}
-              source={profileResult?.data?.avatar_url}
+              source={profileResult?.avatar_url}
               placeholder={{ blurhash }}
               contentFit="cover"
               transition={1000}
@@ -74,21 +74,17 @@ const ProfileScreen = () => {
           </View>
           <View className="p-3">
             <Text className="font-bold text-2xl">
-              {profileResult?.data?.username}
+              {profileResult?.username}
             </Text>
           </View>
           <View className="">
-            <Text className="text-lg">{profileResult?.data?.full_name}</Text>
+            <Text className="text-lg">{profileResult?.full_name}</Text>
           </View>
           <View className="">
-            <Text className="text-lg">
-              {profileResult?.data?.date_of_birth}
-            </Text>
+            <Text className="text-lg">{profileResult?.date_of_birth}</Text>
           </View>
           <View className="">
-            <Text className="text-lg">
-              {profileResult?.data?.date_of_birth}
-            </Text>
+            <Text className="text-lg">{profileResult?.date_of_birth}</Text>
           </View>
           <View className="p-4">
             <Link href="/(profile)/edit">

@@ -52,22 +52,23 @@ const ViewMatchIdScreen = () => {
     "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
   const handleRequestJoin = async (teamId: string) => {
+    router.replace("(match)");
     // handle request join to join the match with team_id
-    try {
-      const { data, error } = await joinMatch({
-        match_id: id,
-        team_id: teamId,
-        joined_at: new Date(),
-      });
+    // try {
+    //   const { data, error } = await joinMatch({
+    //     match_id: id,
+    //     team_id: teamId,
+    //     joined_at: new Date(),
+    //   });
 
-      if (data) {
-        queryClient.invalidateQueries(["availableMatch"] as any);
-        router.replace("/(tabs)/home");
-        console.log(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    //   if (data) {
+    //     queryClient.invalidateQueries(["availableMatch"] as any);
+    //     router.replace("/(tabs)/home");
+    //     console.log(data);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
